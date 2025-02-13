@@ -1,1 +1,429 @@
-"Hello World" 
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Tianren Zhang</title>
+
+  <meta charset="utf-8">
+  <meta name=viewport content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</head>
+<!-- 
+<style>
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+  }
+
+  .section {
+    margin: 0 auto;
+    max-width: 1000px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 2em;
+  }
+
+  h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5em;
+  }
+
+  h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 1em;
+  }
+
+  .content {
+    margin-left: 10px;
+  }
+
+  .biotext {
+    margin: 20px;
+    margin-right: 0;
+    width: 65%;
+    float: left;
+  }
+
+  .bioimage {
+    margin: 20px;
+    margin-left: 0;
+    width: 22%;
+    float: right;
+    border-radius: 20%;
+  }
+
+  .contact {
+    font-size: 1.2em;
+  }
+
+  .clear {
+    clear: both;
+  }
+
+  .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  .paper {
+    font-weight: bold;
+    color:goldenrod;
+  }
+
+  .author {
+    margin: 0;
+    padding: 0;
+  }
+
+  .venue {
+    margin: 0;
+    padding: 0;
+    font-style: italic;
+  }
+
+  .me {
+    font-weight: bold;
+  }
+
+  .hl {
+    font-weight: bold;
+    color: red;
+    font-style: italic;
+  }
+
+</style> -->
+
+
+<style>
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212; /* Dark background color */
+    color: #e0e0e0; /* Light text color for contrast */
+  }
+
+  .section {
+    margin: 0 auto;
+    max-width: 1000px;
+    padding: 20px;
+    background-color: #1e1e1e; /* Darker section background */
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  h1, h2, h3 {
+    color: #ffffff; /* Light color for headings */
+  }
+
+  .content {
+    margin-left: 10px;
+  }
+
+  .biotext {
+    margin: 20px;
+    margin-right: 0;
+    width: 65%;
+    float: left;
+  }
+
+  .bioimage {
+    margin: 20px;
+    margin-left: 0;
+    width: 22%;
+    float: right;
+    border-radius: 20%;
+  }
+
+  .contact {
+    font-size: 1.2em;
+  }
+
+  .clear {
+    clear: both;
+  }
+
+  .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  .paper {
+    font-weight: bold;
+    color: #ffb74d; /* Light orange color for paper titles */
+  }
+
+  a {
+    color: #bb86fc; /* Light purple color for hyperlinks */
+    text-decoration: none; /* Remove underline from hyperlinks */
+  }
+
+  a:hover {
+    text-decoration: underline; /* Underline hyperlinks on hover */
+  }
+
+  .author {
+    margin: 0;
+    padding: 0;
+    color: #e0e0e0; /* Light color for author text */
+  }
+
+  .venue {
+    margin: 0;
+    padding: 0;
+    color: #90ee90;; /* Light color for venue text */
+    font-style: italic;
+  }
+
+  .me {
+    font-weight: bold;
+  }
+
+  .hl {
+    font-weight: bold;
+    color: #ff5252; /* Light red color for highlights */
+    font-style: normal;
+  }
+</style>
+
+<body>
+  <div class="section">
+    <div class="clearfix">
+      <div id="bio">
+        <div class="biotext">
+          <h1>
+            Tianren Zhang &nbsp;|&nbsp; <span style="white-space: nowrap">章天任</span>
+          </h1>
+          <p>
+            I am a final-year Ph.D. student at Tsinghua University, advised by Prof. <a href="https://www.au.tsinghua.edu.cn/en/info/1080/3311.htm">Feng Chen</a>.
+            I also lead the technical team of <a href="https://www.qj-robots.com/">Qianjue Robots</a>.
+          </p>
+          <p>
+            Previously, I received my B.E. degree from the Department of Automation, Tsinghua University in 2019.
+            I interned as an undergraduate at <a href="https://ivg.au.tsinghua.edu.cn/">IVG</a>, Tsinghua University, advised by Prof. <a href="https://ivg.au.tsinghua.edu.cn/jiwen_lu/biography.html">Jiwen Lu</a>.
+          </p>
+          
+          <p style="text-align:center">
+            <span class="contact">
+              <a href="zhangtr22@mails.tsinghua.edu.cn">Email</a> &nbsp;|&nbsp;
+              <!-- <a href="cv/cv.pdf">CV</a> &nbsp;|&nbsp; -->
+              <a
+                href="https://scholar.google.com/citations?user=k74O8j0AAAAJ&hl=en&oi=ao">Google&nbsp;Scholar
+              </a>
+            </span>
+          </p>
+        </div>
+        <img src="imgs/photo_round.png" alt="profile photo" class="bioimage">
+      </div>
+    </div>
+  </div>
+
+  <div class="clear"></div> 
+
+  <div class="section">
+    <h2>Research Interests</h2>
+    <div class="content">
+      <p>
+          I am interested in two intertwined areas of machine learning: <span class="paper">representation learning</span> and <span class="paper">generalization</span>. I believe that
+          a good representation is all we need for human-level generalization and is key to achieving general intelligence.
+      </p>
+      <p>
+          My recent research primarily focuses on the <span class="paper">theoretical foundations</span> of learning world representations and out-of-distribution generalization,
+          as well as translating these theoretical principles into efficient algorithms to solve real-world problems.
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Selected Research</h2>
+    <span>* indicates equal contribution, &dagger; indicates equal correspondance.</span>
+    <div class="content">
+      <ul>
+        <li>
+          <p> 
+            <span class="paper">Feature Contamination: Neural Networks Learn Uncorrelated Features and Fail to Generalize</span>
+            <br>
+            <span class="author"><span class="me">Tianren Zhang*</span>, Chujie Zhao*, Yizhou Jiang, Feng Chen</span>
+            <br>
+            <span class="venue">International Conference on Machine Learning (<strong>ICML</strong>) 2024</span> &nbsp;|&nbsp;
+            <a href="https://arxiv.org/pdf/2406.03345">paper</a> &nbsp;|&nbsp;
+            <a href="https://github.com/trzhang0116/feature-contamination/blob/main/poster.png">poster</a> &nbsp;|&nbsp;
+            <a href="https://github.com/trzhang0116/feature-contamination">code</a>
+            <br>
+            <span><strong>TL;DR: </strong>We identify that neural networks can learn <em>task-irrelevant</em> features due to an implicit bias of SGD, resulting in a failure to generalize under distribution shifts.</span>
+          </p>
+        </li>
+
+        <li>
+          <p> 
+            <span class="paper">Spatio-Temporal Approximation: A Training-Free SNN Conversion for Transformers</span>
+            <br>
+            <span class="author">Yizhou Jiang*, Kunlin Hu*, <span class="me">Tianren Zhang</span>, Haichuan Gao, Yuqian Liu,
+            Ying Fang<sup>&dagger;</sup>, Feng Chen<sup>&dagger;</sup></span>
+            <br>
+            <span class="venue">International Conference on Learning Representations (<strong>ICLR</strong>) 2024</span> &nbsp;|&nbsp;
+            <a href="https://openreview.net/pdf?id=XrunSYwoLr">paper</a> &nbsp;|&nbsp;
+            <a href="https://github.com/ViviaHu/STA">code</a>
+            <br>
+            <span><strong>TL;DR: </strong>We propose the <em>first</em> training-free method for converting transformers to purely event-driven spiking neural networks.</span>
+          </p>
+        </li>
+
+        <li>
+          <p> <span class="paper">M<sup>3</sup>PL: Identifying and Exploiting View Bias of Prompt Learning</span>
+            <br>
+            <span class="author">Chujie Zhao*, <span class="me">Tianren Zhang*</span>, Guanyu Chen, Yizhou Jiang, Feng Chen</span>
+            <br>
+            <span class="venue">Transactions on Machine Learning Research (<strong>TMLR</strong>) 2024</span> &nbsp;|&nbsp;
+            <a href="https://openreview.net/pdf?id=2rnTIBm19V">paper</a> &nbsp;|&nbsp;
+            <a href="https://github.com/cdyyyy/M3PL">code</a>
+            <br>
+            <span><strong>TL;DR: </strong>We identify a <em>view bias</em> in prompt learning of foundation models, i.e., they may
+              extract only a partial subset of useful features while ignoring others, and provide an effective fix.</span>
+          </p>
+        </li>
+
+        <li>
+          <p> <span class="paper">Fast Counterfactual Inference for History-Based Reinforcement Learning</span>
+            <br>
+            <span class="author">Haichuan Gao, <span class="me">Tianren Zhang</span>, Zhile Yang, Yuqing Guo,
+            Jinsheng Ren, Shangqi Guo<sup>&dagger;</sup>, Feng Chen<sup>&dagger;</sup></span>
+            <br>
+            <span class="venue">AAAI Conference on Artificial Intelligence (<strong>AAAI</strong>) 2023</span> &nbsp;|&nbsp;
+            <a href="https://ojs.aaai.org/index.php/AAAI/article/view/25924/25696">paper</a>
+            <br>
+            <span><strong>TL;DR: </strong>We propose a tree-based counterfactual inference method for compressing history observations in reinforcement learning.</span>
+          </p>
+        </li>
+
+        <li>
+          <p> <span class="paper">Adjacency Constraint for Efficient Hierarchical Reinforcement Learning</span>
+            <br>
+            <span class="author"><span class="me">Tianren Zhang*</span>, Shangqi Guo*<sup>&dagger;</sup>, Tian Tan,
+            Xiaolin Hu, Feng Chen<sup>&dagger;</sup></span>
+            <br>
+            <span class="venue">IEEE Transactions on Pattern Analysis and Machine Intelligence (<strong>TPAMI</strong>) 2022 </span> &nbsp;|&nbsp;
+            <a href="https://arxiv.org/pdf/2111.00213">paper</a>
+          </p>
+        </li>
+
+        <li>
+          <p> <span class="paper">Subjective Learning for Conflicting Data</span>
+            <br>
+            <span class="author"><span class="me">Tianren Zhang</span>, Yizhou Jiang, Xin Su,
+              Shangqi Guo, Feng Chen</span>
+            <br>
+            <span class="venue">ICLR 2022 Workshop on Agent Learning in Open-Endedness</span> &nbsp;|&nbsp;
+            <a href="https://openreview.net/pdf?id=HBSUNQvb8bc">paper</a>
+            <br>
+            <span><strong>TL;DR: </strong>An initial attempt of addressing the problem of <em>data conflicts</em> in open-ended training.</span>
+          </p>
+        </li>
+
+        <li>
+          <p>
+            <span class="paper">CRIL: Continual Robot Imitation Learning via Generative
+              and Prediction Model
+            </span>
+            <br>
+            <span class="author">
+              Chongkai Gao, Haichuan Gao, Shangqi Guo, <span class="me">Tianren Zhang</span>, Feng Chen
+            </span>
+            <br>
+            <span class="venue">IEEE/RSJ International Conference on Intelligent Robots and Systems (<strong>IROS</strong>) 2021</span> &nbsp;|&nbsp;
+            <a href="https://arxiv.org/pdf/2106.09422">paper</a> &nbsp;|&nbsp;
+            <a href="https://github.com/HeegerGao/CRIL">code</a>
+            <br>
+            <span><strong>TL;DR: </strong>A continual imitation learning approach for robot learning based on generation and prediction.</span>
+          </p>
+        </li>
+        
+        <li>
+          <p>
+            <span class="paper">Generating Adjacency-Constrained Subgoals for Hierarchical Reinforcement Learning
+            </span>
+            <br>
+            <span class="author"><span class="me">Tianren Zhang*</span>, Shangqi Guo*, Tian Tan, Xiaolin Hu<sup>&dagger;</sup>, Feng Chen<sup>&dagger;</sup></span>
+            <br>
+            <span class="venue">Conference on Neural Information Processing Systems (<strong>NeurIPS</strong>) 2020 <span class="hl">(Spotlight)</span></span> &nbsp;|&nbsp;
+            <a href="https://proceedings.neurips.cc/paper/2020/file/f5f3b8d720f34ebebceb7765e447268b-Paper.pdf">paper</a> &nbsp;|&nbsp;
+            <a href="https://github.com/trzhang0116/HRAC">code</a>
+            <br>
+            <span><strong>TL;DR: </strong>We show that a representation of <em>subgoal adjacency</em> can significantly improve the sample efficiency of hierarchical reinforcement learning.</span>
+          </p>
+        </li>
+        
+        <li>
+          <p>
+            <span class="paper">Deep Meta Metric Learning</span>
+            <br>
+            <span class="author">
+              Guanyi Chen, <span class="me">Tianren Zhang</span>, Jiwen Lu, Jie Zhou</span>
+            <br>
+            <span class="venue">International Conference on Computer Vision (<strong>ICCV</strong>) 2019</span> &nbsp;|&nbsp;
+            <a href="https://openaccess.thecvf.com/content_ICCV_2019/papers/Chen_Deep_Meta_Metric_Learning_ICCV_2019_paper.pdf">paper</a> &nbsp;|&nbsp;
+            <a href="https://github.com/CHENGY12/DMML">code</a>
+          </p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Academic Services</h2>
+    <div class="content">
+      <ul>
+        <li>
+          <p><strong>Conference Reviewer</strong><br>
+            <a href="https://icml.cc">ICML</a> (2025),
+            <a href="https://neurips.cc">NeurIPS</a> (2024),
+            <a href="https://iclr.cc">ICLR</a> (2025),
+            <a href="https://aistats.org">AISTATS</a> (2025),
+            <a href="https://2024.acmmm.org/">ACM MM</a> (2024),
+            <a href="https://cvpr.thecvf.com/">CVPR</a> (2024 - 2025),
+            <a href="https://iccv.thecvf.com/">ICCV</a> (2025),
+          </p>
+        </li>
+        <li>
+          <p><strong>Journal Reviewer</strong><br>
+            <a href="https://www.computer.org/csdl/journal/tp">TPAMI</a>,
+            <a href="https://link.springer.com/journal/10462">Artificial Intelligence Review</a>
+          </p>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+  <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+    <tr>
+      <td style="padding:0px">
+        <br>
+        <p style="text-align:center;font-size:small;">
+          <br>
+          Latest update: Feb 2025
+        </p>
+      </td>
+    </tr>
+  </tbody></table>
+
+</body>
+
+</html>
