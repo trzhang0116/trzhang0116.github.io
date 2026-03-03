@@ -207,6 +207,14 @@
 
 <body>
   <div class="section">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+    <div style="font-size:1.1em;">
+      <a href="index.html" style="margin-right:14px;"><i class="fas fa-home"></i> Home</a>
+      <a href="blog.html"><i class="fas fa-pen-nib"></i> Blog</a>
+    </div>
+  </div>
+  </div>
+  <div class="section">
     <div class="clearfix">
       <div id="bio">
         <div class="biotext">
@@ -267,6 +275,33 @@
       <ul>
         <li>
           <p> 
+            <span class="paper">Reconciling In-Context and In-Weight Learning via Dual Representation Space Encoding</span>
+            <br>
+            <span class="author">Guanyu Chen, Ruichen Wang, <span class="me">Tianren Zhang<sup>&dagger;</sup></span>, Feng Chen<sup>&dagger;</sup></span>
+            <br>
+            <span class="venue">TMLR 2026</span> &nbsp;|&nbsp;
+            <a href="https://openreview.net/pdf?id=bJK7VIOWAU">paper</a> &nbsp;|&nbsp;
+            <a href="https://github.com/McGuinnessChen/dual-representation-space-encoding">code</a>
+            <br>
+            <span><strong>TL;DR: </strong>We show that the conflict between in-context learning (ICL) and in-weight learning (IWL) in Transformers stems from encoding context and samples in a shared representation space, and proposes a dual-space architecture that separates them into a task space and a sample space, thereby improving ICL while better preserving IWL.</span>
+          </p>
+        </li>
+
+        <li>
+          <p> 
+            <span class="paper">Adaptive Fission: Post-training Encoding for Low-Latency Spike Neural Networks</span>
+            <br>
+            <span class="author">Yizhou Jiang, Feng Chen, Yihan Li, Yuqian Liu, Haichuan Gao, <span class="me">Tianren Zhang<sup>&dagger;</sup></span>, Ying Fang<sup>&dagger;</sup></span>
+            <br>
+            <span class="venue">NeurIPS 2025</span> &nbsp;|&nbsp;
+            <a href="https://openreview.net/pdf?id=2zZzdAMyYi">paper</a>
+            <br>
+            <span><strong>TL;DR: </strong>We introduce a post-training SNN encoding technique that selectively splits high-sensitivity neurons into groups with varying scales and weights, enabling neuron-specific, on-demand precision and threshold allocation.</span>
+          </p>
+        </li>
+
+        <li>
+          <p>
             <span class="paper">When Do Neural Networks Learn World Models?</span>
             <br>
             <span class="author"><span class="me">Tianren Zhang</span>, Guanyu Chen, Feng Chen</span>
@@ -285,7 +320,7 @@
             <br>
             <span class="author">Guanyu Chen*, Peiyang Wang*, ..., <span class="me">Tianren Zhang<sup>&dagger;</sup></span>, Feng Chen<sup>&dagger;</sup></span>
             <br>
-            <span class="venue">EMNLP 2025 Findings</span> <span class="hl">(Oral)</span> &nbsp;|&nbsp;
+            <span class="venue">EMNLP 2025 Findings</span> &nbsp;|&nbsp;
             <a href="https://arxiv.org/pdf/2503.16401">paper</a>
             <br>
             <span><strong>TL;DR: </strong>We empirically demonstrate that LLMs can generalize unseen, false mathematical reasoning rules to real-world problems, implying the existence of an "abstract-then-reason" process in LLMs.</span>

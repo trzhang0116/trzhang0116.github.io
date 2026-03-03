@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>World Models | Blog</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+body{font-family:'Noto Sans',sans-serif;margin:0;padding:0;background:#121212;color:#e0e0e0;line-height:1.7;}
+.container{max-width:1000px;margin:18px auto;padding:0 14px;}
+.section{background:#1e1e1e;border-radius:8px;padding:22px;box-shadow:0 1px 2px rgba(0,0,0,.25);}
+h1,h2,h3{color:#fff;line-height:1.25;}
+a{color:#bb86fc;text-decoration:none;}
+a:hover{text-decoration:underline;}
+img{max-width:100%;height:auto;border-radius:6px;}
+code,pre{background:#0f0f0f;color:#e6e6e6;border-radius:6px;}
+pre{padding:12px;overflow-x:auto;}
+blockquote{border-left:4px solid #3a3a3a;margin:14px 0;padding:8px 14px;color:#d7d7d7;background:#171717;border-radius:6px;}
+hr{border:0;border-top:1px solid #2b2b2b;margin:24px 0;}
+table{border-collapse:collapse;width:100%;overflow:auto;display:block;}
+th,td{border:1px solid #2b2b2b;padding:8px;}
+th{background:#171717;}
+</style>
+
+<!-- MathJax for LaTeX -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="section">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <div style="font-size:1.05em;">
+        <a href="../index.html" style="margin-right:14px;"><i class="fas fa-home"></i> Home</a>
+        <a href="../blog.html"><i class="fas fa-pen-nib"></i> Blog</a>
+      </div>
+    </div>
+    <hr/>
+    <h1 id="icml-2025-under-what-conditions-can-neural-networks-learn-world-models">What is the "Correct" Definition of World Modeling?</h1>
+
+<!-- <p><img src="./images/title.png" alt="Paper title" /></p> -->
+
+<strong>Paper link: <a href="https://arxiv.org/pdf/2502.09297">https://arxiv.org/pdf/2502.09297</a><br /></strong>
+
+
+<p>By 2025, most people in AI have heard more or less about <strong>world models</strong>. As foundation models have improved rapidly over the past two years—reaching or even surpassing human-level performance in many aspects—our expectations have risen accordingly. The term <em>world model</em> captures one particularly important expectation: <strong>can a model understand the world and predict how it will evolve, the way humans do?</strong></p>
+
+<p>In recent years, many works related to world models have emerged across subfields such as large language models (LLMs), reinforcement learning (RL), and video generation. Yet there is an awkward reality: <strong>the phrase “world model” still lacks a universally accepted, rigorous definition.</strong> As a result, its meaning varies across papers and communities, which easily leads to confusion.</p>
+
+<p>In April 2025, I attended the first World Models Workshop at ICLR 2025. The panel featured many prominent researchers (Chelsea Finn, Stefano Ermon, Jürgen Schmidhuber, David Ha, Jeff Clune, Kun Zhang, …). Interestingly, one of the panel questions was exactly: <em>“What do you mean by a world model?”</em> The answers differed substantially—showing that even today, when the concept has gained wide attention (and plenty of hype), we still lack consensus on fundamental questions such as <strong>“What is a world model?”</strong> and <strong>“When can we say a neural network has learned one?”</strong></p>
+
+<p>Against this backdrop, this post (i) reviews common notions of world models across AI, and (ii) introduces our ICML 2025 paper <em>“When Do Neural Networks Learn World Models?”</em> The work was also presented as an oral at the ICLR 2025 World Models Workshop and received the <strong>Outstanding Paper Award</strong>.</p>
+
+<p>In brief, our paper:</p>
+
+<ul>
+<li>proposes a <strong>general mathematical definition</strong> for learning world models;</li>
+<li>highlights a key difficulty: <strong>non-identifiability</strong>;</li>
+<li>connects <strong>neural-network inductive bias</strong> (especially simplicity bias) to world-model learning, and provides <strong>sufficient conditions</strong> under which a class of world models becomes identifiable.</li>
+</ul>
+
+<p>We hope that introducing a mathematical definition and an analysis framework makes “world models” a topic that can be discussed and studied <strong>rigorously</strong>, and we welcome further discussion.</p>
+
+<h2 id="background">Background</h2>
+
+<p>This section briefly summarizes several common usages of “world model” in AI.</p>
+
+<p><strong>World models in RL.</strong> The work that arguably popularized the term in machine learning is the 2018 paper “World Models” by David Ha and Jürgen Schmidhuber [1]. In that RL setting, a “world model” is essentially the <strong>model</strong> in <em>model-based RL</em>: a predictive model that forecasts future states from the agent’s past states and actions. Concretely, the world model in [1] can be viewed as two parts: an encoder that learns representations of states, and a dynamics model that predicts in the representation space. Much subsequent work in RL and robotics has inherited this naming convention.</p>
+
+<p><strong>Mental models in cognitive science.</strong> As noted in [1], this design is partly inspired by the notion of <em>mental models</em> in cognitive science: “an internal representation of external reality” [2]. Such representations can support downstream tasks like reasoning and decision-making. In modern ML terms, this aligns naturally with representation learning.</p>
+
+<p><strong>World models in LM/LLM research.</strong> In LMs/LLMs, the notion is close to mental models: the goal is to examine whether internal representations learned by an LM/LLM can be decoded into environment states or human-interpretable high-level semantics (e.g., time, space, truthfulness). Representative works include [3] and [4]. Since these are largely interpretability studies of intermediate representations, the phrase <em>world representations</em> is also commonly used.</p>
+
+<p><strong>World models in video generation.</strong> More recently, video-generation systems such as OpenAI’s Sora and DeepMind’s Veo have reignited interest in world models. Here the focus is on <strong>next-frame prediction</strong>, with the implicit premise that generating high-quality videos conditioned on prompts/frames amounts to modeling the real world. In analogy to RL, video frames can be treated as “states” being predicted, except that “actions” are often not modeled explicitly. More recently, several works explore <strong>action-conditioned</strong> video generation (e.g., DeepMind’s Genie 3, World Labs’ Marble, Meta’s V-JEPA2 [5]).</p>
+
+<p>In summary, while these usages differ in implementation details, they largely share two core ingredients: <strong>representation</strong> and <strong>prediction</strong>. In ML terms, the former corresponds to an encoder that learns representations from raw inputs/states, and the latter to a decoder/dynamics head that predicts future inputs/states from learned representations—matching the intuitive ideas of “understanding the world” and “predicting the world.”</p>
+
+<p>However, an immediate question arises: <em>are all models that contain representation + prediction automatically “world models”?</em> Clearly not. A purely structural definition is <strong>trivial</strong>. In practice, what we really care about is <strong>generalization</strong>, not whether a model merely matches a formal architecture. For instance, we only believe a video generator has learned something like a world model if its generated videos respect physical laws and avoid low-level inconsistencies.</p>
+
+<p>So what would be a reasonable mathematical definition of a world model? We argue the key is to characterize what kind of <strong>representation</strong> has been learned. Still using video generation as an example: among models that achieve the same minimal training loss, one model might extract true physical regularities, while another might simply memorize patterns in the training videos. Their training losses look identical, but their learned representations are fundamentally different—and only the former generalizes.</p>
+
+<p>This leads to our central viewpoint:</p>
+
+<blockquote>
+  <p><strong>Learning a world model should be defined as a special form of representation learning.</strong></p>
+</blockquote>
+
+<h2 id="a-mathematical-definition-of-world-models">A mathematical definition of world models</h2>
+
+<p>Here is our formulation.</p>
+
+<blockquote>
+  <p><strong>Definition 1 (world model).</strong> Assume observations <strong>x</strong> ∈ 𝓧 are generated from latent variables <strong>z</strong> ∈ 𝓩 through an invertible transformation <strong>x</strong> = ψ(<strong>z</strong>). If a representation Φ: 𝓧 → 𝓩 satisfies, for any <strong>x</strong> and some transformation T on 𝓩,<br />
+  Φ(<strong>x</strong>) = T(<strong>z</strong>),<br />
+  then we say Φ has learned a world model <strong>up to</strong> T.</p>
+</blockquote>
+
+<p>This definition has two key elements:</p>
+
+<ol>
+<li>it posits that real data are produced by latent variables via a (nonlinear) generative process;  </li>
+<li>it defines a world model as representation learning that recovers the true latents from observations (up to a “simple” ambiguity T).</li>
+</ol>
+
+<p>When T is the identity, learning a world model is exactly learning ψ⁻¹.</p>
+
+<div align="center"><img src="./images/definition.png" width="400"></div>
+
+<p>Why assume a generative model? Because real data inevitably have <strong>structure</strong>: although <strong>x</strong> may be high-dimensional, its “core semantics” are often described by a lower-dimensional latent vector. For images, one may regard <strong>z</strong> as encoding object attributes, spatial relations, and physical regularities; the image <strong>x</strong> is then rendered from <strong>z</strong> by a complex nonlinear function ψ. Typically, dim(<strong>z</strong>) ≪ dim(<strong>x</strong>), which is why real-world data tend to be highly compressible compared with unstructured white noise.</p>
+
+<p>Conversely, if a model can invert this process—i.e., <strong>identify</strong> the latent variables <strong>z</strong> from <strong>x</strong>—then it has captured “how the data are generated.” In practice, using <strong>z</strong> as a representation of <strong>x</strong> yields strong generalization; for example, physical regularities extracted from training data may transfer to out-of-distribution scenarios.</p>
+
+<p>In one sentence:</p>
+
+<blockquote>
+  <p><strong>A world model is an “inverse” of real observations.</strong></p>
+</blockquote>
+
+<p>Of course, exact inversion is often unnecessary and overly strict. Downstream-optimal representations are rarely unique—humans, for example, can use multiple natural languages to express high-level abstractions of the same world. Therefore, we relax the requirement by allowing a transformation T. Importantly, T cannot be arbitrarily complex (otherwise the definition becomes trivial again). In practice, T is intended to come from a “simple” family—e.g., linear transforms.</p>
+
+<p>Readers familiar with nonlinear ICA or causal representation learning may find this definition reminiscent. Indeed, our setting falls under latent-variable learning. A key difference, however, is that we do <strong>not</strong> impose additional structural assumptions on the latent variables <strong>z</strong> (i.e., on the data structure). As we will see, this difference highlights a fundamental challenge of world-model learning.</p>
+
+<h2 id="the-core-challenge-identifiability">The core challenge: identifiability</h2>
+
+<p>Given Definition 1, the difficulty becomes clear: we do not know the true generative model, and we cannot directly observe <strong>z</strong>. How can we ensure the learned representation relates to the true latent variables?</p>
+
+<p>Mathematically, this is the classic problem of <strong>identifiability</strong> in latent-variable modeling: if there exists an algorithm that can <strong>uniquely</strong> recover <strong>z</strong> from observations <strong>x</strong>, then <strong>z</strong> is identifiable. If the true data-generation process yields identifiable latents, then learning a world model is possible.</p>
+
+<div align="center"><img src="./images/non_identifiability.png" width="300"></div>
+
+<p>Unfortunately, identifiability typically requires additional assumptions. In fact, it is known that without restrictions on the structure of <strong>z</strong> or the form of ψ, <strong>z</strong> is generally <strong>not identifiable</strong> [6]. The reason is that the same observed distribution can correspond to infinitely many essentially different pairs (latent variables, generative functions), and we have no way to tell which one is “the true” generative model.</p>
+
+<p>To address non-identifiability, prior approaches often impose structural assumptions, for example: ψ is linear; the dimensions of <strong>z</strong> are independent (nonlinear ICA); or the dependencies among latent dimensions follow an (intervenable) causal graph (causal representation learning), etc.</p>
+
+<p>However, while these assumptions help obtain identifiability in theory, they also limit applicability. Moreover, modern foundation-model pretraining is often “simple but scalable,” centered on generic proxy objectives, and it does not obviously satisfy those strong structural assumptions.</p>
+
+<p>From that perspective, one might conclude that pretraining cannot guarantee identifiability of world models. Yet many recent works suggest that large models are not merely “stochastic parrots”: they can learn non-trivial representations of data-generation processes [3], and some representations even align with human-level abstractions [4]. This apparent tension motivates a question:</p>
+
+<p><strong>Can there exist identifiability conditions that do not rely on explicit structural assumptions on the observed data, but instead can be exploited by the model itself—through inductive bias—to achieve world-model identifiability?</strong></p>
+
+<p>We attempt to answer this question below.</p>
+
+<h2 id="simplicity-bias-and-boolean-modeling">Simplicity bias and Boolean modeling</h2>
+
+<p>The “enemy” of identifiability is <strong>multiplicity of solutions</strong>: for the same observation <strong>x</strong>, there may be many distinct latent explanations <strong>z</strong>. Since these explanations can match the data equally well, the training loss alone cannot tell us which one the model learned.</p>
+
+<div align="center"><img src="./images/inductive_bias.png" width="500"></div>
+
+<p>Our idea is to leverage the model’s <strong>inductive bias</strong>. For over-parameterized neural networks, there are often many solutions that fit the training objective. Empirically and theoretically, networks do not pick among these solutions uniformly at random—they exhibit preferences not explicitly encoded in the loss. Such inductive biases can act as an additional filter over multiple solutions and are widely believed to be a key reason deep networks generalize [8].</p>
+
+<p><img src="./images/simplicity_bias.png" alt="simplicity bias" /></p>
+
+<p>In this work, we focus on a broadly observed inductive bias: <strong>simplicity bias</strong>—the tendency of neural networks (trained with standard optimizers like SGD) to favor “simpler” / lower-complexity solutions among those that fit the training data. In the example figure (from [9]), SGD tends to learn low-complexity linear decision boundaries first and only gradually transitions to more complex nonlinear boundaries. This preference for simpler functions is an instance of simplicity bias.</p>
+
+<p>Simplicity bias also plays a central role in human inductive reasoning. Consider the sequence 2, 4, 6, 8, … . Although infinitely many continuations are possible, most people immediately predict “10,” implicitly applying “simpler answers are more likely correct.” This is essentially an Occam’s razor principle: simpler hypotheses often generalize better.</p>
+
+<p>To analyze the effect of simplicity bias, we still need a way to <strong>measure</strong> the simplicity/complexity of learned functions. This is more subtle than it seems. While we may intuitively say “quadratic is more complex than linear,” it is hard to define a universal complexity measure for arbitrary functions. Kolmogorov complexity is universal but uncomputable; practical approximations often rely on specific compression schemes or are context-dependent.</p>
+
+<div align="center"><img src="./images/boolean_modeling.png" width="400"></div>
+
+<p>Fortunately, in neural-network settings we can exploit a basic fact: computers ultimately process <strong>discrete</strong> variables. Any discrete variable can be encoded losslessly by a <strong>binary (Boolean)</strong> sequence. Therefore, without loss of generality we assume 𝓧 = {−1, 1}^m and 𝓩 = {−1, 1}^d (m ≥ d). The generative function ψ then becomes a <strong>Boolean function</strong>.</p>
+
+<p>This does not automatically solve the complexity-measure issue—Boolean functions can still be arbitrarily complex. The key is that the <strong>Fourier–Walsh transform</strong> provides a natural description of Boolean-function complexity.</p>
+
+<blockquote>
+  <p><strong>Definition 2 (Fourier–Walsh expansion) [10].</strong> Any Boolean function f: {±1}^n → ℝ can be uniquely represented as a multilinear polynomial  </p>
+  
+  <p>f(<strong>x</strong>) = Σ<em>{S ⊆ [n]}  f̂(S) χ</em>S(<strong>x</strong>),  </p>
+  
+  <p>where <strong>x</strong> = (x₁, …, x<em>n), χ</em>S(<strong>x</strong>) = ∏<em>{i∈S} x</em>i are parity functions (monomials), and f̂(S) are the coefficients.</p>
+</blockquote>
+
+<p>Thus, no matter how complex f is, it is a <strong>linear combination</strong> of parity functions; the “nonlinearity” is captured by which parity terms are used. For example, on {±1}^2, the max function f(x₁, x₂) = max(x₁, x₂) can be written as<br />
+f(x₁, x₂) = 1/2 + 1/2 x₁ + 1/2 x₂ − 1/2 x₁ x₂.</p>
+
+<p>We can then define the complexity of f as the highest order of parity terms it uses—its <strong>degree</strong>, denoted deg(f). For instance, deg(max)=2; and for f(x₁,x₂,x₃,x₄) = (1/2)x₁x₂x₃ + 2x₄, we have deg(f)=3.</p>
+
+<p>Intuitively, degree measures the <strong>extent of nonlinearity</strong>. One may also view it as a proxy for Kolmogorov complexity by interpreting degree as a kind of code length needed to describe the function.</p>
+
+<p>This Boolean modeling makes the analysis tractable because parity functions form a <strong>basis</strong> for Boolean function space; a function’s complexity can be defined via its expansion over this basis. For general continuous-function spaces, such a universally convenient basis does not exist, making “fair” complexity comparison much harder.</p>
+
+<h2 id="a-no-free-lunch-theorem-for-representations-and-world-model-identification">A “no free lunch” theorem for representations and world-model identification</h2>
+
+<p>Before presenting the main results, we clarify some definitions. Under our view, world-model learning is a form of representation learning, which in practice is achieved through various <strong>proxy tasks</strong> (supervised classification, contrastive learning, next-token prediction, etc.).</p>
+
+<p>Consider a task h: 𝓧 → ℝ. A model can solve h in two ways:</p>
+
+<ul>
+<li><strong>Flat realization:</strong> fit a function h* end-to-end to approximate h, without explicitly learning a latent representation.</li>
+<li><strong>Hierarchical realization:</strong> decompose h as h = g ∘ Φ, where Φ: 𝓧 → 𝓩 is a representation function and g: 𝓩 → ℝ is a predictor, and then learn Φ and g.</li>
+</ul>
+
+<p>World-model learning aims for hierarchical realizations with Φ = T ∘ ψ⁻¹.</p>
+
+<p>Using Fourier–Walsh degree, we can measure the complexity of these realizations: the flat realization has complexity deg(h*); the hierarchical realization fits Φ and g separately, so we measure its total complexity as deg(Φ) + deg(g). This lets us analyze how simplicity bias affects representation learning.</p>
+
+<h3 id="single-task-learning-a-cold-shower">Single-task learning: a “cold shower”</h3>
+
+<p>We first show that <strong>single-task learning</strong> is not enough: under simplicity bias, the lowest-complexity solution tends to be a flat realization.</p>
+
+<blockquote>
+  <p><strong>Theorem 1 (single task).</strong> For any task h: 𝓧 → ℝ, among all realizations of h, the minimum-complexity solution is some flat realization satisfying  </p>
+  
+  <p>deg(h*) ≤ deg(Φ) + deg(g),  for all Φ, g.</p>
+</blockquote>
+
+<p>Intuitively, learning a latent representation solely for one task is often not “worth it.” In Fourier–Walsh terms, any single task h uses only a finite set of basis terms; even if there exists a universal representation Φ, it may contain extra basis terms irrelevant for h, increasing complexity.</p>
+
+<p>As an analogy: if your only goal is to solve equations of the form x³ = a, you would not build a general cubic formula—you would just take cube roots directly. This also helps explain why networks often learn non-generalizing shortcuts when the data distribution is narrow or biased [11].</p>
+
+<h3 id="multi-task-learning-shared-representations-can-become-cheaper">Multi-task learning: shared representations can become cheaper</h3>
+
+<p>What if we train on more than one task? We show that <strong>multi-task learning</strong> can change the outcome: sharing a representation across tasks can make hierarchical realizations more efficient.</p>
+
+<p>We introduce the <strong>conditional degree</strong> of a task under a representation:</p>
+
+<blockquote>
+  <p><strong>Definition 3 (conditional degree).</strong> For a task h: 𝓧 → ℝ and a representation Φ: 𝓧 → 𝓩, define  </p>
+  
+  <p>deg(h | Φ) = deg(h*) − max_g { deg(g) : h = g ∘ Φ }.</p>
+</blockquote>
+
+<p>If introducing Φ reduces the complexity of solving h (relative to the best flat solution), then Φ has positive value for h. If sufficiently many tasks become simpler due to the same Φ, a simplicity-biased learner will prefer to learn Φ. We prove:</p>
+
+<blockquote>
+  <p><strong>Theorem 2 (multi-task).</strong> For distinct tasks h₁, …, h_n, if there exists Φ: 𝓧 → 𝓩 such that  </p>
+  
+  <p>Σ<em>{i=1}^n deg(h</em>i | Φ) &gt; d²,  </p>
+  
+  <p>where d = dim(𝓩), then the total complexity of hierarchical realizations g_i ∘ Φ is lower than independently learning flat realizations for each task.</p>
+</blockquote>
+
+<p>In practice, proxy objectives used in pretraining (next-token prediction, contrastive learning, masked modeling, etc.) can often be understood as implicit multi-task learning [12]. Theorem 2 provides theoretical justification that multi-task training encourages the emergence of shared representations under simplicity bias.</p>
+
+<h3 id="multi-task-is-not-enough-the-representation-nfl-theorem">Multi-task is not enough: the representation NFL theorem</h3>
+
+<p>Does multi-task learning <em>guarantee</em> learning a world model? No. Theorem 2 says multi-task encourages representation learning, but it does not specify what representation will minimize complexity.</p>
+
+<p>As a starting point, we analyze the case where tasks are sampled <strong>uniformly</strong> from the entire task space (all Boolean functions h: {±1}^n → ℝ). We obtain:</p>
+
+<blockquote>
+  <p><strong>Theorem 3 (a “no free lunch” theorem for representations).</strong> If tasks are sampled uniformly from the full task space, then for any invertible transform T on 𝓩, the representation Φ = T ∘ ψ⁻¹ has the same expected complexity across tasks (in the limit of infinitely many tasks).</p>
+</blockquote>
+
+<p>That is, under a uniform task distribution, the average complexity is the same for any sufficiently informative representation.</p>
+
+<p>By analogy with the classic <strong>No Free Lunch (NFL)</strong> theorem [13]—which says all learning algorithms have equal average performance over all tasks—we call Theorem 3 the <strong>representation NFL theorem</strong>: averaged over all tasks, any information-preserving representation has the same average <strong>complexity</strong>. Therefore, even in multi-task settings, if tasks are uniformly distributed, simplicity bias cannot identify the world model.</p>
+
+<p>A simple intuition is that for any representation, some tasks become “easy” and others “hard.” For example, a semantic image representation makes classification/segmentation easy, but may not help for “predict the RGB value of the center pixel.” Averaging over the full task space, easy and hard tasks cancel out.</p>
+
+<h3 id="real-tasks-are-not-uniform-low-degree-bias-yields-world-model-identifiability">Real tasks are not uniform: low-degree bias yields world-model identifiability</h3>
+
+<p>Fortunately, real-world tasks are not uniformly distributed. Most tasks humans care about are highly related to “semantics.” In language, this bias can be even stronger: the abstractness of language and the requirement of semantic coherence filter out many unreasonable tasks.</p>
+
+<p>Mathematically, we can model this as a <strong>low-degree bias</strong>: compared with a uniform distribution, the real task distribution assigns higher probability to functions of the true latent variables that have lower Fourier degree. Interestingly, we prove that even a slight low-degree preference is sufficient: under simplicity bias, the minimal-complexity representation becomes the desired world model (up to simple symmetries).</p>
+
+<blockquote>
+  <p><strong>Theorem 4 (sufficient condition for world-model identification).</strong> If the task distribution places higher density than the uniform distribution on sufficiently low-degree tasks, then the optimal representation Φ* under simplicity bias satisfies  </p>
+  
+  <p>Φ*(<strong>x</strong>) = P D <strong>z</strong>,  </p>
+  
+  <p>where P is a permutation matrix, D is a diagonal ±1 matrix, and <strong>z</strong> = ψ⁻¹(<strong>x</strong>).</p>
+</blockquote>
+
+<p>Equivalently, Φ* identifies the world model up to <strong>permutation</strong> and <strong>bitwise negation</strong>. These ambiguities are very simple: the learned representation differs from the true latent variables only by reordering dimensions and flipping signs, without fundamentally changing the latent structure.</p>
+
+<p><strong>Connection to the Linear Representation Hypothesis (LRH).</strong> LRH is a well-known hypothesis in LM/LLM research: intermediate representations in LLMs often align with human-interpretable high-level semantics, and these semantics are linearly represented in the embedding space [3,4]. While LRH is often viewed as evidence that large models “truly understand” aspects of data generation, its mechanism is still debated. If we interpret high-level semantics as latent variables of a world model, then Theorem 4 can be seen as a provable Boolean analogue of LRH: permutation and sign flip correspond exactly to all first-order Boolean functions; over the reals, they naturally correspond to <strong>linear</strong> functions.</p>
+
+<p>Putting the pieces together, we obtain a fairly comprehensive sufficient condition:</p>
+
+<blockquote>
+  <p><strong>When the model exhibits simplicity bias, is trained with multi-task objectives, and the task distribution has some low-degree preference, the world model becomes identifiable.</strong></p>
+</blockquote>
+
+<p>Compared with prior analyses that obtain identifiability by imposing strong structural assumptions on data generation, our results place fewer requirements on the data and instead emphasize the <strong>model</strong> and <strong>task distribution</strong>—a perspective that we believe is more compatible with modern pretraining paradigms.</p>
+
+<p>We further analyze a key advantage of world models: <strong>out-of-distribution (OOD) generalization.</strong> In a setting related to length generalization, we show that under certain conditions on downstream tasks, hierarchical realizations with world models have provably smaller OOD generalization error than flat realizations. Due to space limits, please see Section 4.3 of the paper for details.</p>
+
+<p><img src="./images/experiments.png" alt="Experimental results" /></p>
+
+<p>So far we have mainly discussed how simplicity bias and task distributions in <strong>function space</strong> can induce world-model identifiability. In practice, neural-network architectures can significantly affect which function families are preferred. In our paper, we also formalize how architectural design can influence identifiability by changing the “function basis” of Boolean function space.</p>
+
+<p>Based on the theory, we designed a series of proof-of-concept experiments in controlled environments to validate the effects of multi-task training and simplicity bias on world-model learning. Guided by the theoretical findings, we also modified standard MLP and Transformer architectures on two representative tasks, achieving better extrapolation and generalization. Interested readers can refer to the paper for details.</p>
+
+<h2 id="summary-and-outlook">Summary and outlook</h2>
+
+<p>From the perspective of identifiability, we proposed a definition of world-model learning and systematically analyzed when neural networks can learn world models:</p>
+
+<ol>
+<li><strong>Multi-task learning:</strong> good representations do not naturally emerge under a single task, while multi-task training creates pressure to learn shared representations;  </li>
+<li><strong>Simplicity bias:</strong> the intrinsic simplicity bias of neural networks and optimization is a key force for breaking non-identifiability;  </li>
+<li><strong>Low-degree task distributions:</strong> only when training tasks have a preference toward low-degree functions does the world model become reliably identifiable in multi-task learning.</li>
+</ol>
+
+<p>These results can also inform algorithm design. We believe that <strong>shaping the task distribution and architectural choices to increase the “low-degree” nature of proxy objectives</strong> may be crucial for faster and more accurate emergence of world models. Concretely, constructing “lower-degree” self-supervised tasks may help models capture the core latent variables in data generation. For instance, representation-level prediction may be preferable to pixel/token-level prediction—an idea reflected in several recent pretraining works [14–16]. More specifically, training pipelines for LLMs or multimodal models could include auxiliary low-degree objectives related to world regularities (commonsense reasoning, basic physical-law prediction, etc.). In video/multimodal models, proxy tasks such as inferring velocity and acceleration could further regularize representations. Finally, designing a <strong>differentiable complexity measure</strong> for regularization is also an interesting direction.</p>
+
+<p>We hope this work provides a starting point for future theoretical studies on world models, and offers one possible theoretical lens for understanding and guiding capability evolution of foundation models through representation learning. Inevitably, parts of this post remain rough; feedback is very welcome. Looking ahead, we also hope world models will create broader practical impact beyond video generation, such as in embodied intelligence.</p>
+
+<h2 id="references">References</h2>
+
+<p>[1] Ha, D. and Schmidhuber, J. <em>World models.</em> arXiv:1803.10122, 2018.<br />
+[2] Craik, K. J. W. <em>The Nature of Explanation.</em> CUP Archive, 1967.<br />
+[3] Li, K., Hopkins, A. K., and Bau, D. <em>Emergent world representations: Exploring a sequence model trained on a synthetic task.</em> ICLR, 2023.<br />
+[4] Gurnee, W. and Tegmark, M. <em>Language models represent space and time.</em> ICLR, 2024.<br />
+[5] Assran, M. et al. <em>V-JEPA 2: Self-supervised video models enable understanding, prediction and planning,</em> 2025.<br />
+[6] Hyvärinen, A., and Pajunen, P. <em>Nonlinear independent component analysis: Existence and uniqueness results.</em> Neural Networks, 12(3), 429–439, 1999.<br />
+[7] Khemakhem, I., Kingma, D. P., Monti, R. P., and Hyvärinen, A. <em>Variational autoencoders and nonlinear ICA: A unifying framework.</em> AISTATS, 2020.<br />
+[8] Zhang, C., Bengio, S., Hardt, M., Recht, B., and Vinyals, O. <em>Understanding deep learning requires rethinking generalization.</em> ICLR, 2017.<br />
+[9] Nakkiran, P., Kaplun, G., Kalimeris, D., Yang, T., Edelman, B., Zhang, F., and Barak, B. <em>SGD on neural networks learns functions of increasing complexity.</em> NeurIPS, 2019.<br />
+[10] O’Donnell, R. <em>Analysis of Boolean Functions.</em> arXiv:2105.10386, 2021.<br />
+[11] Geirhos, R. et al. <em>Shortcut learning in deep neural networks.</em> Nature Machine Intelligence, 2(11), 665–673, 2020.<br />
+[12] Radford, A. et al. <em>Language models are unsupervised multitask learners,</em> 2019.<br />
+[13] Wolpert, D. H. <em>The lack of a priori distinctions between learning algorithms.</em> Neural Computation, 8(7), 1341–1390, 1996.<br />
+[14] Ren, S., Wang, Z., Zhu, H., Xiao, J., Yuille, A., &amp; Xie, C. <em>Rejuvenating Image-GPT as strong visual representation learners.</em> ICML, 2023.<br />
+[15] Yu, S., Kwak, S., Jang, H., Jeong, J., Huang, J., Shin, J., &amp; Xie, S. <em>Representation alignment for generation: Training diffusion transformers is easier than you think.</em> ICLR, 2025.<br />
+[16] Tack, J., et al. <em>LLM pretraining with continuous concepts.</em> arXiv:2502.08524, 2025.</p>
+
+  </div>
+</div>
+</body>
+</html>
