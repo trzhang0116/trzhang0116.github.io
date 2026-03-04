@@ -507,24 +507,44 @@
     </div>
   </div>
 
-<div class="section">
-  <h2>Visitor Map</h2>
-  <div class="content">
-    <!-- <p style="margin-top:0; color:#b0b0b0;">
-      Aggregated visitor locations (country/region level).
-    </p> -->
-    <div class="visitor-map" style="display:flex; justify-content:center;">
-      <div style="max-width:900px; width:100%; max-height:520px; overflow:hidden; border-radius:6px;">
-      <!-- <div style="max-width:900px; width:100%; overflow:hidden; border-radius:6px;"> -->
-        <script
-          type="text/javascript"
-          id="mmvst_globe"
-          src="https://mapmyvisitors.com/globe.js?d=QGFuk7SyXWd8z7j_eDpwDvwVEhP1xKN3SpcFuszJL4g">
-        </script>
+  <div class="section">
+    <h2>Visitor Map</h2>
+    <div class="content">
+      <div class="visitor-map" style="display:flex; justify-content:center;">
+        <!-- 这个外层只负责限制显示宽度 -->
+        <div style="max-width:900px; width:100%;">
+          <!-- 这个内层负责按比例缩放 900x900 -->
+          <div style="width:100%; transform-origin: top left;"
+               id="mmv-scale-wrap">
+            <script
+              type="text/javascript"
+              id="mmvst_globe"
+              src="https://mapmyvisitors.com/globe.js?d=QGFuk7SyXWd8z7j_eDpwDvwVEhP1xKN3SpcFuszJL4g">
+            </script>
+          </div>
+        </div>
       </div>
+
+      <script>
+        // 将 900px 的默认地图缩放到容器宽度（响应式）
+        (function () {
+          function scaleMMV() {
+            var wrap = document.getElementById('mmv-scale-wrap');
+            if (!wrap) return;
+            var parent = wrap.parentElement;
+            if (!parent) return;
+            var w = parent.clientWidth || 900;
+            var s = Math.min(1, w / 900); // 以 900 为基准缩放
+            wrap.style.transform = 'scale(' + s + ')';
+            // 预留高度，避免缩放后父容器高度塌陷（900 * scale）
+            wrap.style.height = (900 * s) + 'px';
+          }
+          window.addEventListener('load', scaleMMV);
+          window.addEventListener('resize', scaleMMV);
+        })();
+      </script>
     </div>
   </div>
-</div>
 
   <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
     <tr>
