@@ -512,7 +512,7 @@
     <div class="content">
       <div class="visitor-map" style="display:flex; justify-content:center;">
         <!-- 这个外层只负责限制显示宽度 -->
-        <div style="max-width:900px; width:100%;">
+        <div style="max-width:500px; width:100%;">
           <!-- 这个内层负责按比例缩放 900x900 -->
           <div style="width:100%; transform-origin: top left;"
                id="mmv-scale-wrap">
@@ -521,7 +521,7 @@
         </div>
       </div>
 
-      <script>
+      <!-- <script>
         // 将 900px 的默认地图缩放到容器宽度（响应式）
         (function () {
           function scaleMMV() {
@@ -538,7 +538,7 @@
           window.addEventListener('load', scaleMMV);
           window.addEventListener('resize', scaleMMV);
         })();
-      </script>
+      </script> -->
     </div>
   </div>
 
